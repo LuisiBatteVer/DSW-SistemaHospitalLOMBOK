@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.jcr'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Lombok en tiempo de compilación
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
+
+    // Lombok para tests
+    testCompileOnly("org.projectlombok:lombok:1.18.34")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
+}
+
+
+test {
+    useJUnitPlatform()
+}
