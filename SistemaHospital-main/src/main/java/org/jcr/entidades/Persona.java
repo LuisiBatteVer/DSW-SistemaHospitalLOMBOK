@@ -1,12 +1,14 @@
 package org.jcr.entidades;
-//No usé @ToString porque es personalizado: incluye llamada anidada a getDescripcion() en tipoSangre (para salida legible) y todos los campos para depuración completa; @ToString generaría genérico, pero aquí es óptimo manual para control (evita exposición sensible en subclases): No usé @ToString porque es personalizado: incluye llamada anidada a getDescripcion() en tipoSangre (para salida legible) y todos los campos para depuración completa; @ToString generaría genérico, pero aquí es óptimo manual para control (evita exposición sensible en subclases).
-//se aplico lombok. Se puede aplicar Lombok de forma efectiva en clases abstractas con herencia: Usé @Getter a nivel de clase porque hay múltiples getters repetitivos y básicos para los campos protegidos/finales (getNombre(), getApellido(), getDni(), getFechaNacimiento(), getTipoSangre()), que solo retornan el valor sin lógica adicional
+
+// Lombok se aplica: genera getters básicos automáticos.
+// No usé @ToString porque hice uno manual para controlar la salida y mostrar tipoSangre con su descripción.
+
 import lombok.Getter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Getter  // Genera automáticamente los getters simples para los campos: getNombre(), getApellido(), getDni(), getFechaNacimiento(), getTipoSangre()
+@Getter  // Genera automáticamente los getters simples
 public abstract class Persona implements Serializable {
     protected final String nombre;
     protected final String apellido;
@@ -30,7 +32,8 @@ public abstract class Persona implements Serializable {
         return LocalDate.now().getYear() - fechaNacimiento.getYear();
     }
 
-    private String validarString(String valor, String mensajeError) {
+    // 🔹 Ahora son protected para que Paciente y Medico puedan usarlos
+    protected String validarString(String valor, String mensajeError) {
         Objects.requireNonNull(valor, mensajeError);
         if (valor.trim().isEmpty()) {
             throw new IllegalArgumentException(mensajeError);
@@ -38,7 +41,7 @@ public abstract class Persona implements Serializable {
         return valor;
     }
 
-    private String validarDni(String dni) {
+    protected String validarDni(String dni) {
         Objects.requireNonNull(dni, "El DNI no puede ser nulo");
         if (!dni.matches("\\d{7,8}")) {
             throw new IllegalArgumentException("El DNI debe tener 7 u 8 dígitos");
